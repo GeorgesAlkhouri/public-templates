@@ -12,7 +12,18 @@
     templates = let
       python39 = {
         path = ./templates/python39;
-        description = "A flake with python39 virtualenv, direnv and devenv.";
+        description = "A flake with python3.9 virtualenv, direnv and devenv.";
+        welcomeText = ''
+          # `.devenv` should be added to `.gitignore`
+          ```sh
+            echo .devenv >> .gitignore
+          ```
+        '';
+      };
+
+      python312 = {
+        path = ./templates/python312;
+        description = "A flake with python3.12 virtualenv, direnv and devenv.";
         welcomeText = ''
           # `.devenv` should be added to `.gitignore`
           ```sh
@@ -22,7 +33,7 @@
       };
     in {
       inherit python39;
-      default = python39;
+      default = python312;
     };
   };
 }
