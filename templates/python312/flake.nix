@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:cachix/devenv-nixpkgs/rolling";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default";
     devenv.url = "github:cachix/devenv";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
@@ -14,6 +15,7 @@
   outputs = {
     self,
     nixpkgs,
+    nixpkgs-unstable,
     devenv,
     systems,
     ...
@@ -27,8 +29,16 @@
     devShells =
       forEachSystem
       (system: let
+        overlays = [
+          (final: prev: {
+            unstable = import nixpkgs-unstable {
+              system = final.system;
+              config.allowUnfree = true;
+            };
+          })
+        ];
         pkgs = import nixpkgs {
-          inherit system;
+          inherit system overlays;
           config = {
           };
         };
@@ -38,7 +48,7 @@
           modules = [
             {
               # https://devenv.sh/reference/options/
-              packages = with pkgs; [];
+              packages = with pkgs.unstable; [git pyright ruff ruff-lsp python312Packages.isort python312Packages.pyflakes pre-commit];
               languages.python.enable = true;
               languages.python.package = pkgs.python312;
               languages.python.venv.enable = true;
