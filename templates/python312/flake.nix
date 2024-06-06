@@ -52,6 +52,8 @@
               languages.python.enable = true;
               languages.python.package = pkgs.python312;
               languages.python.venv.enable = true;
+              languages.python.uv.enable = true;
+              languages.python.uv.package = pkgs.unstable.uv;
               enterShell = ''
               '';
             }
