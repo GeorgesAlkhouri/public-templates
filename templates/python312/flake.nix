@@ -48,6 +48,9 @@
           modules = [
             {
               # https://devenv.sh/reference/options/
+              scripts.pip.exec = ''
+                uv pip "$@";
+              '';
               packages = with pkgs.unstable; [git pyright ruff ruff-lsp python312Packages.isort python312Packages.pyflakes pre-commit];
               languages.python.enable = true;
               languages.python.package = pkgs.python312;
